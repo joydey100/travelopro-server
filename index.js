@@ -1,3 +1,4 @@
+// Require essential Modules
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const app = express();
@@ -5,16 +6,14 @@ const cors = require("cors");
 const port = process.env.PORT || 5000;
 const ObjectId = require("mongodb").ObjectId;
 
-// dotenv config
+// Config dotenv
 require("dotenv").config();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-
 // Connect with mogodb
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.eyyvk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -28,16 +27,14 @@ async function run() {
     const packages = database.collection("packages");
     const lists = database.collection("all-list");
 
-    console.log("MongoDb Connected");
-
-    // Get Packages from mongodb
+    // Get Packages from Mongodb Database
     app.get("/packages", async (req, res) => {
       const cursor = packages.find({});
       const result = await cursor.toArray();
       res.json(result);
     });
 
-    // specific element or tour package get
+    // Get specific tour packages
     app.get("/packages/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -52,14 +49,14 @@ async function run() {
       res.json(result);
     });
 
-    // get all the lists
+    // Get orderlist from my order list
     app.get("/orderlist", async (req, res) => {
       const cursor = lists.find({});
       const result = await cursor.toArray();
       res.json(result);
     });
 
-    // get  my order data
+    // Get spcific user email order list
     app.get("/orderlist/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email };
@@ -68,7 +65,7 @@ async function run() {
       res.json(result);
     });
 
-    // update Data
+    // Status Update
     app.put("/status/:id", async (req, res) => {
       const id = req.params.id;
       const getData = req.body;
@@ -83,7 +80,7 @@ async function run() {
       res.json(result);
     });
 
-    // Remove from list
+    // Remove users Tour package
     app.delete("/lists/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
@@ -91,7 +88,7 @@ async function run() {
       res.json(result);
     });
 
-    // post new package
+    // Posting new package
     app.post("/packages", async (req, res) => {
       const obj = req.body;
       const result = await packages.insertOne(obj);
