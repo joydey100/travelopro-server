@@ -12,11 +12,6 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-// user and pass
-/* 
-user = travelopro
-pass = sximUVmptKOojTCB
-*/
 
 // Connect with mogodb
 
